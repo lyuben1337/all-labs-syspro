@@ -13,6 +13,13 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#include <commdlg.h> 
+#include <fstream> 
+#include <vector> 
+#include <string> 
+#include <Shlwapi.h>
+
+#pragma comment(lib, "Shlwapi.lib")
 
 int size(wchar_t* str) {
     int size = 0;
@@ -21,3 +28,5 @@ int size(wchar_t* str) {
     }
     return size;
 }
+
+

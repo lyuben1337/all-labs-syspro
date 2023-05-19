@@ -27,6 +27,9 @@
     <ClInclude Include="AllLabsWinAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ellipse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AllLabsWinAPI.cpp">

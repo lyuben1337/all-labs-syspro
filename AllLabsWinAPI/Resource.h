@@ -42,6 +42,22 @@
 #define ID_LABS_4_ELIPSE                32797
 #define ID_LABS_4_LINE                  32798
 #define ID_LABS_4_SQUARE                32799
+#define ID_PROCESSES_CREATEPROCESS      32802
+#define ID_PROCESSES_DELETEPROCESS      32803
+#define ID_LABS_5_ELIPSE                32804
+#define ID_LABS_5_PROCESSES             32805
+#define ID_WORKINGWITHFILES_FILE        32808
+#define ID_LABS_5_FILE                  32809
+#define ID_WORKINGWITHFILES_TYPESDELETING 32810
+#define ID_FILE_CREATE                  32811
+#define ID_FILE_OPEN                    32812
+#define ID_FILE_SAVE                    32813
+#define ID_FILE_COPY                    32814
+#define ID_FILE_INFO                    32815
+#define ID_FILE_MOVETOANOTHERLOGICDISK  32816
+#define ID_TYPESDELETING_HIDDEN         32819
+#define ID_TYPESDELETING_TXT            32820
+#define ID_TYPESDELETING_DOCX           32821
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -50,7 +66,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        137
-#define _APS_NEXT_COMMAND_VALUE         32800
+#define _APS_NEXT_COMMAND_VALUE         32825
 #define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           110
 #endif

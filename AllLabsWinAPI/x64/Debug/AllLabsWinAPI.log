@@ -1,12 +1,17 @@
 ﻿  AllLabsWinAPI.cpp
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(474,13): warning C4101: 'debugString': unreferenced local variable
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(577,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(580,34): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(581,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(583,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(585,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(596,82): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(596,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(602,30): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(640,17): warning C4101: 'ps': unreferenced local variable
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\ellipse.h(36,15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\ellipse.h(38,25): warning C4244: 'argument': conversion from 'ULONGLONG' to 'unsigned int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(613,13): warning C4101: 'debugString': unreferenced local variable
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(716,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(719,34): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(720,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(722,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(724,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(735,82): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(735,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(741,30): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(779,17): warning C4101: 'ps': unreferenced local variable
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1088,60): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1190,55): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1199,17): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
   AllLabsWinAPI.vcxproj -> C:\Users\lyube\source\repos\AllLabsWinAPI\x64\Debug\AllLabsWinAPI.exe

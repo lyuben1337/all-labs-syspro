@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "AllLabsWinAPI.h"
+#include "ellipse.h"
 
 #define MAX_LOADSTRING 100
 
@@ -11,6 +12,8 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 HCURSOR cursor;
+int screenX = 800;
+int screenY = 500;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -21,11 +24,19 @@ INT_PTR CALLBACK    Authors(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Time(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Closing(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    ReadText(HWND, UINT, WPARAM, LPARAM);
+DWORD WINAPI        ThreadPaint(LPVOID lParam);
+std::string         GenerateUniqueName(bool flag);
+bool                deleteAllFile(TCHAR* dir, TCHAR* path, bool atribute);
 
 int labNumber;
 void lab2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void lab3(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void lab4(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+void lab5(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, HANDLE& hTreadPaint, STARTUPINFO& tin, PROCESS_INFORMATION& pInfo, DWORD& exitCode);
+void lab6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+void lab7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+void lab8(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+void lab9(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -102,8 +113,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
-   int screenX = 800;
-   int screenY = 500;
 
    HWND hWnd = CreateWindow(
        szWindowClass,   // ім’я класу вікна
@@ -142,8 +151,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    int screenX = 800;
-    int screenY = 500;
+
+    static HANDLE hThreadPaint;
+    static STARTUPINFO tin;
+    static PROCESS_INFORMATION pInfo;
+    static DWORD exitCode;
 
     switch (labNumber)
     {
@@ -157,8 +169,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         lab4(hWnd, message, wParam, lParam);
         break;
     case 5:
+        lab5(hWnd, message, wParam, lParam, hThreadPaint, tin, pInfo, exitCode);
         break;
     case 6:
+        lab6(hWnd, message, wParam, lParam);
         break;
     case 7:
         break;
@@ -171,6 +185,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     switch (message)
     {
+    case WM_CREATE:
+        tin.cb = sizeof(STARTUPINFO);
+        tin.dwFlags = STARTF_USESHOWWINDOW;
+        tin.wShowWindow = SW_SHOWNORMAL;
+        hThreadPaint = CreateThread(NULL, 0, ThreadPaint, (LPVOID)hWnd, 0, NULL);
+        break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
@@ -207,7 +227,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case ID_LABS_2:
                 labNumber = 2;
                 screenX = 800;
-                screenY = 500;
+                screenY = 600;
                 InvalidateRect(hWnd, NULL, TRUE);
                 break;   
             case ID_LABS_3:
@@ -243,14 +263,114 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     lab4(hWnd, message, wParam, lParam);
                 }
                 break;
-            case ID_LABS_5:
-                labNumber = 5;
-                InvalidateRect(hWnd, NULL, TRUE);
-                break;   
-            case ID_LABS_6:
-                labNumber = 6;
-                InvalidateRect(hWnd, NULL, TRUE);
-                break;   
+            case ID_LABS_5_ELIPSE:
+                if (labNumber != 5) {
+                    labNumber = 5;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab5(hWnd, message, wParam, lParam, hThreadPaint, tin, pInfo, exitCode);
+                }
+                break;
+            case ID_PROCESSES_CREATEPROCESS:
+                if (labNumber != 5) {
+                    labNumber = 5;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab5(hWnd, message, wParam, lParam, hThreadPaint, tin, pInfo, exitCode);
+                }
+                break;
+            case ID_PROCESSES_DELETEPROCESS:
+                if (labNumber != 5) {
+                    labNumber = 5;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab5(hWnd, message, wParam, lParam, hThreadPaint, tin, pInfo, exitCode);
+                }
+                break;
+            case ID_FILE_COPY:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_FILE_CREATE:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_FILE_INFO:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_FILE_MOVETOANOTHERLOGICDISK:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_FILE_OPEN:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_FILE_SAVE:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_TYPESDELETING_DOCX:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_TYPESDELETING_HIDDEN:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
+            case ID_TYPESDELETING_TXT:
+                if (labNumber != 6) {
+                    labNumber = 6;
+                    screenX = 800;
+                    screenY = 500;
+                    InvalidateRect(hWnd, NULL, TRUE);
+                    lab6(hWnd, message, wParam, lParam);
+                }
+                break;
             case ID_LABS_7:
                 labNumber = 7;
                 InvalidateRect(hWnd, NULL, TRUE);
@@ -295,6 +415,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         DialogBox(hInst, MAKEINTRESOURCE(IDD_CLOSE), hWnd, Closing);
         break;
     case WM_DESTROY:
+        GetExitCodeProcess(pInfo.hProcess, &exitCode);
+        if (exitCode == STILL_ACTIVE) TerminateProcess(pInfo.hProcess, 0);
+        for (int i = 0; i < massEllipse.size(); i++) {
+            CloseHandle(massEllipse[i].hThread);
+        }
+        CloseHandle(hThreadPaint);
         DestroyWindow(hWnd);
         break;
     default:
@@ -460,6 +586,19 @@ INT_PTR CALLBACK ReadText(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+DWORD WINAPI ThreadPaint(LPVOID lParam)
+{
+    HWND hWnd = (HWND)lParam;
+    while (true)
+    {
+        if (labNumber == 5) {
+            InvalidateRect(hWnd, NULL, TRUE);
+            Sleep(20);
+        }
+    }
+    return 0;
 }
 
 void lab2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -824,4 +963,275 @@ void lab4(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
         ReleaseCapture();
         break;
     }
+}
+
+void lab5(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, HANDLE& hTreadPaint, STARTUPINFO& tin, PROCESS_INFORMATION& pInfo, DWORD& exitCode) {
+    switch (message)
+    {
+    case WM_KEYDOWN:
+        if (wParam == VK_SPACE) {
+            MyEllipse NewEllipse;
+            NewEllipse.hThread = CreateThread(NULL, 0, *ThreadBall, (LPVOID)hWnd, 0, NULL);
+            massEllipse.push_back(NewEllipse);
+        }
+        break;
+        break;
+    case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+
+        switch (wmId)
+        {
+        case ID_PROCESSES_CREATEPROCESS:
+            GetExitCodeProcess(pInfo.hProcess, &exitCode);
+            if (exitCode != STILL_ACTIVE) CreateProcess(L"C:\\Windows\\notepad.exe", NULL,
+                NULL, NULL, FALSE, 0, NULL, NULL, &tin, &pInfo);
+            break;
+        case ID_PROCESSES_DELETEPROCESS:
+            GetExitCodeProcess(pInfo.hProcess, &exitCode);
+            if (exitCode == STILL_ACTIVE) TerminateProcess(pInfo.hProcess, 0);
+            else MessageBox(hWnd, L"Даний процес відсутній. Будь ласка, запустіть спочатку Ваш редактор!", L"", MB_OK);
+            break;
+        default:
+            break;
+        }
+    }
+    break;
+    case WM_PAINT: {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        for (int i = 0; i < massEllipse.size(); i++) {
+            Ellipse(hdc, massEllipse[i].cx, massEllipse[i].cy, massEllipse[i].cx + R, massEllipse[i].cy + R);
+        }
+        EndPaint(hWnd, &ps);
+    }
+        break;
+    default:
+        break;
+    }
+}
+
+void lab6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    PAINTSTRUCT ps;
+    HDC hdc;
+    static TCHAR name[256] = _T("");
+    static TCHAR lastOpen[256] = _T("");
+    static TCHAR delName[256] = _T("");
+    static TCHAR info[1024] = _T("");
+    static TCHAR drives[1024] = _T("");
+    static TCHAR curDir[256];
+    static TCHAR newName[256];
+    TCHAR* drive;
+    HANDLE hFile;
+    static OPENFILENAME file;
+    std::ifstream in;
+    static std::vector<std::string> v;
+    std::vector<std::string>::iterator it;
+    std::string st;
+    int y;
+    GetCurrentDirectory(256, curDir);
+    file.lStructSize = sizeof(OPENFILENAME);
+    file.hInstance = hInst;
+    file.lpstrFile = name;
+    file.nMaxFile = 256;
+    file.lpstrInitialDir = _T(".\\");
+    file.lpstrDefExt = _T("txt");
+
+    switch (message)
+    {
+    case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        switch (wmId)
+        {
+        case ID_FILE_CREATE:
+            file.lpstrTitle = L"Створіть файл";
+            file.Flags = OFN_HIDEREADONLY;
+            if (GetSaveFileName(&file))
+            {
+                HANDLE hFile = CreateFile(name, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+                if (hFile != INVALID_HANDLE_VALUE)
+                {
+                    DWORD dwBytesWritten;
+                    WriteFile(hFile, "NEW FILE!\n", 10, &dwBytesWritten, NULL);
+                    CloseHandle(hFile);
+                }
+            }
+            break;
+        case ID_FILE_OPEN:
+            if (!v.empty()) std::vector<std::string>().swap(v);
+            file.lpstrTitle = L"Оберіть файл для відкриття";
+            file.lpstrFilter = _T("Text\0*.txt");
+            file.Flags = OFN_HIDEREADONLY;;
+            if (!GetOpenFileName(&file))
+                break;
+
+            in.open(name);
+
+            while (getline(in, st))
+                v.push_back(st);
+
+            in.close();
+            _tcscpy_s(lastOpen, 256, name);
+            InvalidateRect(hWnd, NULL, 1);
+            break;
+        case ID_FILE_SAVE:
+            wsprintf(newName, L"%s\\%hs.txt", curDir, GenerateUniqueName(1).c_str());
+            hFile = CreateFile(newName, GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_READONLY, NULL);
+
+            if (hFile != INVALID_HANDLE_VALUE)
+            {
+                DWORD dwBytesWritten;
+                WriteFile(hFile, "SAVE FILE!\n", 11, &dwBytesWritten, NULL);
+                for (it = v.begin(); it < v.end(); ++it)
+                {
+                    WriteFile(hFile, it->data(), it->length(), &dwBytesWritten, NULL);
+                    WriteFile(hFile, "\n", 1, &dwBytesWritten, NULL);
+
+                }
+                CloseHandle(hFile);
+            }
+            break;
+        case ID_FILE_COPY:
+            _tcscpy_s(newName, 256, lastOpen);
+            PathRemoveFileSpec(newName);
+            wsprintf(newName, L"%s\\%hs.txt", newName, GenerateUniqueName(0).c_str());
+            CopyFile(lastOpen, newName, 0);
+            break;
+        case ID_TYPESDELETING_TXT:
+            wsprintf(delName, L"%s\\*.txt", curDir);
+            if (!deleteAllFile(curDir, delName, 0))
+                MessageBox(NULL, L"Невдалося видалити файли", L"Error", MB_ICONERROR | MB_OK);
+            break;
+        case ID_TYPESDELETING_DOCX:
+            wsprintf(delName, L"%s\\*.docx", curDir);
+            if (!deleteAllFile(curDir, delName, 0))
+                MessageBox(NULL, L"Невдалося видалити файли", L"Error", MB_ICONERROR | MB_OK);
+            break;
+        case ID_TYPESDELETING_HIDDEN:
+            wsprintf(delName, L"%s\\*.*", curDir);
+            if (!deleteAllFile(curDir, delName, 1))
+                MessageBox(NULL, L"Невдалося видалити файли", L"Error", MB_ICONERROR | MB_OK);
+            break;
+        case ID_FILE_INFO:
+            file.lpstrFilter = L"All Files\0*.*\0";
+            file.Flags = OFN_HIDEREADONLY;
+            if (!GetOpenFileName(&file))
+                break;
+            hFile = CreateFile(name, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            if (hFile != INVALID_HANDLE_VALUE) {
+                BY_HANDLE_FILE_INFORMATION fileInfo;
+                if (GetFileInformationByHandle(hFile, &fileInfo)) {
+                    TCHAR fileTime[20], fileDate[20], fileSize[20], attributes[10];
+
+                    SYSTEMTIME stUTC, stLocal;
+                    FileTimeToSystemTime(&fileInfo.ftLastWriteTime, &stUTC);
+                    SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+                    wsprintf(fileTime, L"%02d:%02d:%02d", stLocal.wHour, stLocal.wMinute, stLocal.wSecond);
+
+                    wsprintf(fileDate, L"%02d/%02d/%04d", stLocal.wMonth, stLocal.wDay, stLocal.wYear);
+
+                    wsprintf(fileSize, L"%I64u bytes", ((ULONGLONG)fileInfo.nFileSizeHigh << 32) | fileInfo.nFileSizeLow);
+
+                    wsprintf(attributes, L"%c%c%c%c%c%c%c%c", (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE) ? 'A' : '-',
+                        (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED) ? 'C' : '-',
+                        (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? 'D' : '-',
+                        (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) ? 'H' : '-',
+                        (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_NORMAL) ? 'N' : '-',
+                        (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_READONLY) ? 'R' : '-',
+                        (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM) ? 'S' : '-',
+                        (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY) ? 'T' : '-');
+
+                    wsprintf(info, L"File Name: %s\nFile Time: %s\nFile Date: %s\nFile Size: %s\nFile Attributes: %s",
+                        name, fileTime, fileDate, fileSize, attributes);
+                    MessageBox(hWnd, info, L"File Information", MB_OK);
+                }
+                CloseHandle(hFile);
+            }
+            break;
+        case ID_FILE_MOVETOANOTHERLOGICDISK:
+            GetLogicalDriveStrings(1024, drives);
+
+            drive = drives;
+            while (*drive)
+            {
+
+                TCHAR driveLetter = drive[0];
+                TCHAR fileDriveLetter = name[0];
+                if (driveLetter != fileDriveLetter)
+                {
+
+                    _tcscpy_s(newName, 256, drive);
+                    break;
+                }
+
+                drive += _tcslen(drive) + 1;
+            }
+
+            wsprintf(newName, L"%s%s", newName, PathFindFileName(name));
+
+            if (MoveFile(name, newName))
+                MessageBox(NULL, newName, L"Info", MB_OK);
+            else
+                MessageBox(NULL, L"Неможливо перемістити", L"Error", MB_OK | MB_ICONERROR);
+            break;
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+        default:
+            break;
+        }
+    }
+    break;
+    case WM_PAINT:
+    {
+        hdc = BeginPaint(hWnd, &ps);
+        for (y = 0, it = v.begin(); it < v.end(); ++it, y += 16)
+            TextOutA(hdc, 0, y, it->data(), it->length());
+        EndPaint(hWnd, &ps);
+
+    }
+    }
+}
+
+std::string GenerateUniqueName(bool flag)
+{
+    DWORD ticks = GetTickCount64();
+    std::string name = (flag ? "File" : "Copy") + std::to_string(ticks);
+    return name;
+}
+
+bool deleteAllFile(TCHAR* dir, TCHAR* path, bool atribute)
+{
+    WIN32_FIND_DATA fileData;
+    HANDLE hFind = FindFirstFile(path, &fileData);
+    if (hFind == INVALID_HANDLE_VALUE)
+        return 0;
+    do
+    {
+        TCHAR filePath[256];
+        wsprintf(filePath, TEXT("%s\\%s"), dir, fileData.cFileName);
+        if (atribute)
+        {
+            if (fileData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
+            {
+                SetFileAttributes(filePath, FILE_ATTRIBUTE_NORMAL);
+                if (!DeleteFile(filePath))
+                    return 0;
+
+            }
+        }
+        else
+        {
+            SetFileAttributes(filePath, FILE_ATTRIBUTE_NORMAL);
+            if (!DeleteFile(filePath))
+                return 0;
+        }
+
+    } while (FindNextFile(hFind, &fileData));
+
+    FindClose(hFind);
+
+    return 1;
+
 }
