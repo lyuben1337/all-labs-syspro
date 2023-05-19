@@ -142,6 +142,11 @@
     <Image Include="AllLabsWinAPI.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="POINTER.cur" />
+    <None Include="POINTER1.cur" />
+    <None Include="POINTER2.cur" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

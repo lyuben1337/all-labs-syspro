@@ -10,6 +10,7 @@
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+HCURSOR cursor;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -18,6 +19,8 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Authors(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Time(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    Closing(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    ReadText(HWND, UINT, WPARAM, LPARAM);
 int labNumber;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -74,12 +77,12 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ALLLABSWINAPI));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
+    wcex.hIcon          = LoadIcon(NULL, IDI_INFORMATION);
+    wcex.hCursor        = LoadCursor(nullptr, IDC_WAIT);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_ALLLABSWINAPI);
     wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wcex.hIconSm        = NULL;
 
     return RegisterClassExW(&wcex);
 }
@@ -97,9 +100,22 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
+   int screenX = 800;
+   int screenY = 500;
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   HWND hWnd = CreateWindow(
+       szWindowClass,   // ім’я класу вікна
+       szTitle, // назва програми
+       WS_OVERLAPPEDWINDOW | WS_VSCROLL,    // стиль вікна
+       (GetSystemMetrics(SM_CXSCREEN) - screenX) / 2, // положення по Х
+       (GetSystemMetrics(SM_CYSCREEN) - screenY) / 2, // положення по Y  
+       screenX,       // розмір по Х
+       screenY,       // розмір по Y
+       NULL,           // дескриптор батьківського вікна  
+       NULL,           // дескриптор меню вікна
+       hInstance,         // дескриптор програми
+       NULL
+   );         // параметри створення.
 
    if (!hWnd)
    {
@@ -141,9 +157,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_TIME:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_TIME), hWnd, Time);
                 break;
-            case ID_LABS_1:
-                labNumber = 1;
-                break;   
+            case ID_CURSORE_CURSORE1:
+                cursor = LoadCursor(hInst, MAKEINTRESOURCE(IDC_CURSOR1));
+                SetCursor(cursor);
+                break;
+            case ID_CURSORE_CURSORE2:
+                cursor = LoadCursor(hInst, MAKEINTRESOURCE(IDC_CURSOR2));
+                SetCursor(cursor);
+                break;
+            case ID_CURSORE_CURSORE3:
+                cursor = LoadCursor(hInst, MAKEINTRESOURCE(IDC_CURSOR3));
+                SetCursor(cursor);
+                break;
+            case ID_LABS_1_READTEXT:
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_READ), hWnd, ReadText);
+                break;
             case ID_LABS_2:
                 labNumber = 2;
                 break;   
@@ -181,8 +209,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             EndPaint(hWnd, &ps);
         }
         break;
+    case WM_SETCURSOR:
+        if (LOWORD(lParam) == HTCLIENT) {
+            if (GetCursor() != NULL) {
+                return TRUE;
+            }
+        }
+        break;
+    case WM_CLOSE:
+        DialogBox(hInst, MAKEINTRESOURCE(IDD_CLOSE), hWnd, Closing);
+        break;
     case WM_DESTROY:
-        PostQuitMessage(0);
+        DestroyWindow(hWnd);
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -290,6 +328,59 @@ INT_PTR CALLBACK Time(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         {
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
+}
+
+INT_PTR CALLBACK Closing(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+    case WM_TIMER:
+        KillTimer(hDlg, 2); // Останавливаем таймер
+        PostQuitMessage(0); // Посылаем сообщение о завершении приложения
+        break;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        if (LOWORD(wParam) == IDOK)
+        {
+            SetTimer(hDlg, 2, 2000, NULL); // Запускаем таймер на 3 секунды
+            EnableWindow(GetDlgItem(hDlg, IDOK), FALSE); // Блокируем кнопку "ОК"
+            EnableWindow(GetDlgItem(hDlg, IDCANCEL), FALSE); // Блокируем кнопку "Отмена"
+            MessageBox(hDlg, L"Window is closing in 2 seconds", L"Attention!", FALSE);
+        }
+        break;
+    }
+    return (INT_PTR)FALSE;
+}
+
+INT_PTR CALLBACK ReadText(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    UNREFERENCED_PARAMETER(lParam);
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return (INT_PTR)TRUE;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        if (LOWORD(wParam) == IDOK)
+        {
+            wchar_t s_text_1[255];
+            GetWindowText(GetDlgItem(hDlg, IDC_EDIT1), s_text_1, 255);
+            MessageBox(hDlg, s_text_1, L"Text", FALSE);
         }
         break;
     }
