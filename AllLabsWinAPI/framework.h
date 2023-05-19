@@ -13,3 +13,11 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
+int size(wchar_t* str) {
+    int size = 0;
+    while (str[size]) {
+        size++;
+    }
+    return size;
+}

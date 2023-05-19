@@ -1,2 +1,12 @@
 ﻿  AllLabsWinAPI.cpp
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(474,13): warning C4101: 'debugString': unreferenced local variable
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(577,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(580,34): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(581,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(583,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(585,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(596,82): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(596,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(602,30): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(640,17): warning C4101: 'ps': unreferenced local variable
   AllLabsWinAPI.vcxproj -> C:\Users\lyube\source\repos\AllLabsWinAPI\x64\Debug\AllLabsWinAPI.exe
