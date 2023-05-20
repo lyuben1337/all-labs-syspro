@@ -59,6 +59,15 @@
 #define ID_TYPESDELETING_TXT            32820
 #define ID_TYPESDELETING_DOCX           32821
 #define IDC_STATIC                      -1
+#define IDM_LAB1                        33780
+#define IDM_LAB2                        33781
+#define IDM_LAB3                        33782
+#define IDM_LAB4                        33783
+#define IDM_LAB5                        33784
+#define IDM_LAB6                        33785
+#define IDM_LAB7                        33786
+#define IDM_LAB8                        33787
+#define IDM_LAB9                        33788
 
 // Next default values for new objects
 // 

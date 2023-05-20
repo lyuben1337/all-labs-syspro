@@ -24,8 +24,8 @@ struct MyEllipse
     int nap;
 };
 
-vector<MyEllipse> massEllipse;
-static HANDLE hThreadPaint;
+vector<MyEllipse> massEllipse{};
+static HANDLE hThreadPaint{};
 
 DWORD WINAPI ThreadBall(LPVOID lParam)
 {
