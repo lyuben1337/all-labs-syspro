@@ -1,0 +1,2 @@
+﻿AllLabsWinAPI.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) int __stdcall DrawRandomCircle(struct HDC__ *,struct tagPOINT)" (__imp_?DrawRandomCircle@@YGHPAUHDC__@@UtagPOINT@@@Z) referenced in function "long __stdcall WndProc(struct HWND__ *,unsigned int,unsigned int,long)" (?WndProc@@YGJPAUHWND__@@IIJ@Z)
+C:\Users\lyube\source\repos\AllLabsWinAPI\Debug\AllLabsWinAPI.exe : fatal error LNK1120: 1 unresolved externals

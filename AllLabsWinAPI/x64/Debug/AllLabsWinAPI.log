@@ -1,17 +1,17 @@
 ﻿  AllLabsWinAPI.cpp
 C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\ellipse.h(36,15): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\ellipse.h(38,25): warning C4244: 'argument': conversion from 'ULONGLONG' to 'unsigned int', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(613,13): warning C4101: 'debugString': unreferenced local variable
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(716,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(719,34): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(720,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(722,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(724,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(735,82): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(735,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(741,30): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(779,17): warning C4101: 'ps': unreferenced local variable
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1088,60): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1190,55): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1199,17): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(682,17): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(731,13): warning C4101: 'debugString': unreferenced local variable
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(834,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(837,34): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(838,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(840,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(842,33): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(853,82): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(853,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(859,30): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(897,17): warning C4101: 'ps': unreferenced local variable
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1206,60): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+C:\Users\lyube\source\repos\AllLabsWinAPI\AllLabsWinAPI\AllLabsWinAPI.cpp(1308,55): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   AllLabsWinAPI.vcxproj -> C:\Users\lyube\source\repos\AllLabsWinAPI\x64\Debug\AllLabsWinAPI.exe

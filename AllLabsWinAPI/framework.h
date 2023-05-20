@@ -1,4 +1,4 @@
-// header.h : include file for standard system include files,
+﻿// header.h : include file for standard system include files,
 // or project specific include files
 //
 
@@ -18,6 +18,7 @@
 #include <vector> 
 #include <string> 
 #include <Shlwapi.h>
+#include <intrin.h>
 
 #pragma comment(lib, "Shlwapi.lib")
 
@@ -28,5 +29,3 @@ int size(wchar_t* str) {
     }
     return size;
 }
-
-

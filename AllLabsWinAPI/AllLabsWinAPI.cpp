@@ -5,6 +5,7 @@
 #include "AllLabsWinAPI.h"
 #include "ellipse.h"
 
+
 #define MAX_LOADSTRING 100
 
 // Global Variables:
@@ -14,11 +15,25 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 HCURSOR cursor;
 int screenX = 800;
 int screenY = 500;
+WINGDIAPI BOOL WINAPI DrawRandomCircle(HDC, POINT);
+typedef BOOL(WINAPI* PFN) (HDC, LPARAM);
+static HINSTANCE hLibrary;
+static PFN mouseRect;
+HDC				hdc;
+PAINTSTRUCT		ps;
+HBITMAP			hBitmap;
+static HDC		memBit;
+static POINT	pt;
+static POINT	s;
+SYSTEMTIME		tm;
+RECT clientRect;
+
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK    WndProc1(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Authors(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    Time(HWND, UINT, WPARAM, LPARAM);
@@ -27,6 +42,11 @@ INT_PTR CALLBACK    ReadText(HWND, UINT, WPARAM, LPARAM);
 DWORD WINAPI        ThreadPaint(LPVOID lParam);
 std::string         GenerateUniqueName(bool flag);
 bool                deleteAllFile(TCHAR* dir, TCHAR* path, bool atribute);
+int                 division(int a, int b);
+int                 substraction(int a, int b);
+void                binaryString(int num, char* str);
+
+
 
 int labNumber;
 void lab2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -34,7 +54,16 @@ void lab3(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void lab4(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void lab5(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, HANDLE& hTreadPaint, STARTUPINFO& tin, PROCESS_INFORMATION& pInfo, DWORD& exitCode);
 void lab6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-void lab7(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+void lab7(HWND hWnd,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam,
+    PFN& mouseRect,
+    HDC& memBit,
+    POINT& pt,
+    POINT& s,
+    SYSTEMTIME& tm,
+    HDC hdc);
 void lab8(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void lab9(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -117,7 +146,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    HWND hWnd = CreateWindow(
        szWindowClass,   // ім’я класу вікна
        szTitle, // назва програми
-       WS_OVERLAPPEDWINDOW | WS_VSCROLL | SWP_NOZORDER | SWP_NOACTIVATE | WS_HSCROLL,    // стиль вікна
+       WS_OVERLAPPEDWINDOW | WS_VSCROLL,   // стиль вікна
        (GetSystemMetrics(SM_CXSCREEN) - screenX) / 2, // положення по Х
        (GetSystemMetrics(SM_CYSCREEN) - screenY) / 2, // положення по Y  
        screenX,       // розмір по Х
@@ -149,9 +178,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - post a quit message and return
 //
 //
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
     static HANDLE hThreadPaint;
     static STARTUPINFO tin;
     static PROCESS_INFORMATION pInfo;
@@ -175,6 +204,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         lab6(hWnd, message, wParam, lParam);
         break;
     case 7:
+        switch (message)
+        {
+        case WM_TIMER:
+            DrawRandomCircle(memBit, s);
+            InvalidateRect(hWnd, NULL, 0);
+            break;
+        case WM_PAINT:
+            hdc = BeginPaint(hWnd, &ps);
+            s.x = clientRect.right;
+            s.y = clientRect.bottom;
+            BitBlt(hdc, 0, 0, s.x, s.y, memBit, 0, 0, SRCCOPY);
+            EndPaint(hWnd, &ps);
+            break;
+        case WM_LBUTTONUP:
+            mouseRect(memBit, lParam);
+            InvalidateRect(hWnd, NULL, 0);
+            break;
+        default:
+            break;
+        }
         break;
     case 8:
         break;
@@ -190,6 +239,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         tin.dwFlags = STARTF_USESHOWWINDOW;
         tin.wShowWindow = SW_SHOWNORMAL;
         hThreadPaint = CreateThread(NULL, 0, ThreadPaint, (LPVOID)hWnd, 0, NULL);
+        hLibrary = LoadLibrary(L"sisPro6Dll");
+        GetClientRect(hWnd, &clientRect);
+        if (hLibrary)
+        {
+            mouseRect = (PFN)GetProcAddress(hLibrary, "DrawMouseRect");
+            if (mouseRect == NULL)
+            {
+                MessageBox(hWnd, _T("Функция Triangle не найдена"),
+                    _T("LoadLibrary"), MB_OK | MB_ICONQUESTION);
+                DestroyWindow(hWnd);
+                return 0;
+            }
+        }
+        else
+        {
+            DestroyWindow(hWnd);
+            return 0;
+        }
+        SetTimer(hWnd, 1, 100, NULL);
+        pt.x = GetSystemMetrics(SM_CXSCREEN);
+        pt.y = GetSystemMetrics(SM_CYSCREEN);
+        hdc = GetDC(hWnd);
+        memBit = CreateCompatibleDC(hdc);
+        hBitmap = CreateCompatibleBitmap(hdc, pt.x, pt.y);
+        SelectObject(memBit, hBitmap);
+        PatBlt(memBit, 0, 0, pt.x, pt.y, WHITENESS);
+        ReleaseDC(hWnd, hdc);
+        GetSystemTime(&tm);
+        srand(tm.wMilliseconds);
         break;
     case WM_COMMAND:
         {
@@ -373,12 +451,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case ID_LABS_7:
                 labNumber = 7;
-                InvalidateRect(hWnd, NULL, TRUE);
                 break;   
-            case ID_LABS_8:
-                labNumber = 8;
-                InvalidateRect(hWnd, NULL, TRUE);
-                break;
+            case ID_LABS_8: {
+                    /*labNumber = 8;
+                    int a;
+                    char out[33];
+                    binaryString(a, out);
+                    std::string myStdString(out);
+                    std::wstring myWideString(myStdString.begin(), myStdString.end());*/
+                MessageBox(hWnd, L"XUI", NULL, NULL);
+            }
+            break;
             case ID_LABS_9:
                 labNumber = 9;
                 InvalidateRect(hWnd, NULL, TRUE);
@@ -394,14 +477,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 screenY,
                 SWP_NOZORDER | SWP_NOACTIVATE
             );
-        }
-        break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-           
-            EndPaint(hWnd, &ps);
         }
         break;
     case WM_SETCURSOR:
@@ -420,7 +495,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         for (int i = 0; i < massEllipse.size(); i++) {
             CloseHandle(massEllipse[i].hThread);
         }
-        CloseHandle(hThreadPaint);
+        FreeLibrary(hLibrary);
+        DeleteObject(memBit);
         DestroyWindow(hWnd);
         break;
     default:
@@ -599,6 +675,48 @@ DWORD WINAPI ThreadPaint(LPVOID lParam)
         }
     }
     return 0;
+}
+
+std::string GenerateUniqueName(bool flag)
+{
+    DWORD ticks = GetTickCount64();
+    std::string name = (flag ? "File" : "Copy") + std::to_string(ticks);
+    return name;
+}
+
+bool deleteAllFile(TCHAR* dir, TCHAR* path, bool atribute)
+{
+    WIN32_FIND_DATA fileData;
+    HANDLE hFind = FindFirstFile(path, &fileData);
+    if (hFind == INVALID_HANDLE_VALUE)
+        return 0;
+    do
+    {
+        TCHAR filePath[256];
+        wsprintf(filePath, TEXT("%s\\%s"), dir, fileData.cFileName);
+        if (atribute)
+        {
+            if (fileData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
+            {
+                SetFileAttributes(filePath, FILE_ATTRIBUTE_NORMAL);
+                if (!DeleteFile(filePath))
+                    return 0;
+
+            }
+        }
+        else
+        {
+            SetFileAttributes(filePath, FILE_ATTRIBUTE_NORMAL);
+            if (!DeleteFile(filePath))
+                return 0;
+        }
+
+    } while (FindNextFile(hFind, &fileData));
+
+    FindClose(hFind);
+
+    return 1;
+
 }
 
 void lab2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -1192,46 +1310,4 @@ void lab6(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 
     }
     }
-}
-
-std::string GenerateUniqueName(bool flag)
-{
-    DWORD ticks = GetTickCount64();
-    std::string name = (flag ? "File" : "Copy") + std::to_string(ticks);
-    return name;
-}
-
-bool deleteAllFile(TCHAR* dir, TCHAR* path, bool atribute)
-{
-    WIN32_FIND_DATA fileData;
-    HANDLE hFind = FindFirstFile(path, &fileData);
-    if (hFind == INVALID_HANDLE_VALUE)
-        return 0;
-    do
-    {
-        TCHAR filePath[256];
-        wsprintf(filePath, TEXT("%s\\%s"), dir, fileData.cFileName);
-        if (atribute)
-        {
-            if (fileData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
-            {
-                SetFileAttributes(filePath, FILE_ATTRIBUTE_NORMAL);
-                if (!DeleteFile(filePath))
-                    return 0;
-
-            }
-        }
-        else
-        {
-            SetFileAttributes(filePath, FILE_ATTRIBUTE_NORMAL);
-            if (!DeleteFile(filePath))
-                return 0;
-        }
-
-    } while (FindNextFile(hFind, &fileData));
-
-    FindClose(hFind);
-
-    return 1;
-
 }
